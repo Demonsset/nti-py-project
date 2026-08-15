@@ -1,5 +1,5 @@
 import operations
-# import analysis        # uncomment once Phase 3 exists
+import analysis
 import visualization
 
 
@@ -121,16 +121,13 @@ def main():
             prompt_calculate_attendance_percentage()
 
         elif choice == 8:
-            # Depends on Phase 3's analysis.display_late_employees()
-            print("Display late employees is not implemented yet (Phase 3).")
+            analysis.display_late_employees()
 
         elif choice == 9:
-            # Depends on Phase 3's analysis.display_frequently_absent_employees()
-            print("Display frequently absent employees is not implemented yet (Phase 3).")
+            analysis.display_frequently_absent_employees()
 
         elif choice == 10:
-            # Depends on Phase 3's analysis.monthly_report()
-            print("Monthly report is not implemented yet (Phase 3).")
+            analysis.monthly_report()
 
         elif choice == 11:
             visualization.show_all_charts()
