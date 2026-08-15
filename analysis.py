@@ -102,6 +102,28 @@ def numpy_summary():
     }
     
 
+def display_frequently_absent_employees():
+   
+    merged = _merged_df()
+
+    if merged.empty:
+        print("No attendance data available.")
+        return
+
+    absent_counts = merged[merged["Status"] == "Absent"].groupby("Employee ID").size()
+    absent_counts = absent_counts[absent_counts >= ABSENT_THRESHOLD]
+
+    if absent_counts.empty:
+        print(f"No employees absent {ABSENT_THRESHOLD} or more times.")
+        return
+
+    names = merged.drop_duplicates("Employee ID").set_index("Employee ID")["Name"]
+
+    print(f"\n--- Employees Absent {ABSENT_THRESHOLD}+ Times ---")
+    for emp_id, count in absent_counts.sort_values(ascending=False).items():
+        print(f"ID: {emp_id} | Name: {names.get(emp_id, 'Unknown')} | Absent days: {count}")
+
+
 
 def pandas_report(filter_by="none", filter_value="none"):
     """
@@ -169,6 +191,9 @@ def pandas_report(filter_by="none", filter_value="none"):
         "sorted_by_attendance_pct": sorted_by_attendance_pct,
     }
 
+
+
+
 def display_late_employees():
     
     merged = _merged_df()
@@ -190,27 +215,6 @@ def display_late_employees():
     for emp_id, count in late_counts.sort_values(ascending=False).items():
         print(f"ID: {emp_id} | Name: {names.get(emp_id, 'Unknown')} | Late days: {count}")
 
-
-def display_frequently_absent_employees():
-   
-    merged = _merged_df()
-
-    if merged.empty:
-        print("No attendance data available.")
-        return
-
-    absent_counts = merged[merged["Status"] == "Absent"].groupby("Employee ID").size()
-    absent_counts = absent_counts[absent_counts >= ABSENT_THRESHOLD]
-
-    if absent_counts.empty:
-        print(f"No employees absent {ABSENT_THRESHOLD} or more times.")
-        return
-
-    names = merged.drop_duplicates("Employee ID").set_index("Employee ID")["Name"]
-
-    print(f"\n--- Employees Absent {ABSENT_THRESHOLD}+ Times ---")
-    for emp_id, count in absent_counts.sort_values(ascending=False).items():
-        print(f"ID: {emp_id} | Name: {names.get(emp_id, 'Unknown')} | Absent days: {count}")
 
 
 def monthly_report():
