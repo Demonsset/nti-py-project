@@ -103,7 +103,6 @@ def numpy_summary():
     
 
 
-
 def pandas_report(filter_by="none", filter_value="none"):
     """
     pandas requirements (image 2):
@@ -128,7 +127,6 @@ def pandas_report(filter_by="none", filter_value="none"):
             "sorted_by_attendance_pct": pd.DataFrame(),
         }
 
-    
     filtered = merged
     if filter_by == "employee":
         filtered = merged[merged["Employee ID"] == str(filter_value)]
@@ -139,12 +137,17 @@ def pandas_report(filter_by="none", filter_value="none"):
     elif filter_by == "status":
         filtered = merged[merged["Status"] == str(filter_value)]
 
-    # --- Group by department, count each status ---
-    status_by_department = (
-        merged.groupby("Department")["Status"]
-        .value_counts()
-        .unstack(fill_value=0)
-    )
+  
+    counts = {}
+
+    for dept, statuses in merged.groupby("Department")["Status"]:
+        counts[dept] = {}
+        for status in statuses:
+            if status not in counts[dept]:
+                counts[dept][status] = 0
+            counts[dept][status] += 1
+
+    status_by_department = pd.DataFrame(counts).fillna(0).astype(int)
 
     # --- Sort employees by attendance percentage ---
     per_employee = []
@@ -165,7 +168,6 @@ def pandas_report(filter_by="none", filter_value="none"):
         "status_by_department": status_by_department,
         "sorted_by_attendance_pct": sorted_by_attendance_pct,
     }
-
 
 def display_late_employees():
     """Option 8. Lists employees late LATE_THRESHOLD or more times."""
