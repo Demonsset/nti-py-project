@@ -1,6 +1,6 @@
 import operations
-import analysis
-import visualization
+# import analysis        # uncomment once Phase 3 exists
+# import visualization   # uncomment once Phase 3 exists
 
 
 MENU_TEXT = """
@@ -16,75 +16,106 @@ MENU_TEXT = """
  9. Display frequently absent employees
 10. Generate a monthly report
 11. Show attendance charts
-12. Save data
-13. Exit
+12. Mark an absence / vacation
+13. Save data
+14. Exit
 ======================================
 """
 
 
 def get_menu_choice():
     while True:
-        choice = input("Enter your choice (1-13): ").strip()
-        if choice.isdigit() and 1 <= int(choice) <= 13:
+        choice = input("Enter your choice (1-14): ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= 14:
             return int(choice)
-        print("Invalid choice. Please enter a number between 1 and 13.")
+        print("Invalid choice. Please enter a number between 1 and 14.")
+
+
+def prompt_add_employee():
+    employee_id = input("Employee ID: ").strip()
+    name = input("Name: ").strip()
+    department = input("Department: ").strip()
+    operations.add_employee(employee_id, name, department)
+
+
+def prompt_record_attendance():
+    emp_id = input("Employee ID: ").strip()
+    date = input("Date (YYYY-MM-DD): ").strip()
+    arrival = input("Arrival time (HH:MM): ").strip()
+    departure = input("Departure time (HH:MM): ").strip()
+    operations.record_attendance(emp_id, date, arrival, departure)
+
+
+def prompt_mark_absence():
+    emp_id = input("Employee ID: ").strip()
+    date = input("Date (YYYY-MM-DD): ").strip()
+    status = input("Status (Absent/Vacation): ").strip().capitalize()
+    operations.mark_absence(emp_id, date, status)
 
 
 def main():
-    employees = operations.load_employees()
-    attendance = operations.load_attendance()
+    # operations.py owns employees/attendance_records as module-level globals.
+    # These calls mutate operations.employees / operations.attendance_records
+    # in place and return nothing — do NOT assign their result to a variable.
+    operations.load_employees()
+    operations.load_attendance()
 
     while True:
         print(MENU_TEXT)
         choice = get_menu_choice()
 
         if choice == 1:
-            operations.add_employee(employees)
+            prompt_add_employee()
 
         elif choice == 2:
-            operations.display_employees(employees)
+            operations.display_employees()
 
         elif choice == 3:
-            operations.record_attendance(employees, attendance)
+            prompt_record_attendance()
 
         elif choice == 4:
-            operations.update_attendance(attendance)
+            # Depends on Phase 2's update_attendance(emp_id, date, new_fields)
+            print("Update attendance is not implemented yet (Phase 2).")
 
         elif choice == 5:
-            emp_id = input("Enter Employee ID: ").strip()
-            operations.display_employee_attendance(attendance, emp_id)
+            # Depends on Phase 2's display_employee_attendance(emp_id)
+            print("Display employee attendance is not implemented yet (Phase 2).")
 
         elif choice == 6:
-            date = input("Enter date (YYYY-MM-DD): ").strip()
-            operations.search_attendance_by_date(attendance, date)
+            # Depends on Phase 2's search_attendance_by_date(date)
+            print("Search attendance by date is not implemented yet (Phase 2).")
 
         elif choice == 7:
-            emp_id = input("Enter Employee ID: ").strip()
-            pct = operations.calculate_attendance_percentage(attendance, emp_id)
-            print(f"Attendance percentage: {pct:.2f}%")
+            # Depends on Phase 2's calculate_attendance_percentage(emp_id)
+            print("Calculate attendance percentage is not implemented yet (Phase 2).")
 
         elif choice == 8:
-            analysis.display_late_employees(attendance)
+            # Depends on Phase 3's analysis.display_late_employees()
+            print("Display late employees is not implemented yet (Phase 3).")
 
         elif choice == 9:
-            analysis.display_frequently_absent_employees(attendance)
+            # Depends on Phase 3's analysis.display_frequently_absent_employees()
+            print("Display frequently absent employees is not implemented yet (Phase 3).")
 
         elif choice == 10:
-            analysis.monthly_report(employees, attendance)
+            # Depends on Phase 3's analysis.monthly_report()
+            print("Monthly report is not implemented yet (Phase 3).")
 
         elif choice == 11:
-            visualization.chart_attendance_by_employee(attendance)
-            visualization.chart_status_breakdown(attendance)
-            visualization.chart_absences_by_department(employees, attendance)
+            # Depends on Phase 3's visualization chart functions
+            print("Attendance charts are not implemented yet (Phase 3).")
 
         elif choice == 12:
-            operations.save_employees(employees)
-            operations.save_attendance(attendance)
-            print("Data saved.")
+            prompt_mark_absence()
 
         elif choice == 13:
-            operations.save_employees(employees)
-            operations.save_attendance(attendance)
+            operations.save_employees()
+            operations.save_attendance()
+            print("Data saved.")
+
+        elif choice == 14:
+            operations.save_employees()
+            operations.save_attendance()
             print("Data saved. Goodbye!")
             break
 
