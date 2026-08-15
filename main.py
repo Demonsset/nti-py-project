@@ -1,6 +1,6 @@
 import operations
 # import analysis        # uncomment once Phase 3 exists
-# import visualization   # uncomment once Phase 3 exists
+import visualization
 
 
 MENU_TEXT = """
@@ -133,8 +133,7 @@ def main():
             print("Monthly report is not implemented yet (Phase 3).")
 
         elif choice == 11:
-            # Depends on Phase 3's visualization chart functions
-            print("Attendance charts are not implemented yet (Phase 3).")
+            visualization.show_all_charts()
 
         elif choice == 12:
             prompt_mark_absence()
