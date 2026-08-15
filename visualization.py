@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import operations
 
 
-def chart_attendance_by_employee():
+def chart_attendance_by_employee():#BAAAAR CHART
     names = []
     percentages = []
 
@@ -21,7 +21,7 @@ def chart_attendance_by_employee():
     plt.xlabel("Employee")
     plt.ylabel("Attendance %")
     plt.title("Attendance Percentage by Employee")
-    plt.xticks(rotation=45, ha="right")
+    plt.xticks(rotation=45, ha="right")#horizontal alignment
     plt.grid()
     plt.tight_layout()
     plt.show()
@@ -31,14 +31,16 @@ def chart_status_breakdown():
     counts = {"Present": 0, "Late": 0, "Absent": 0, "Vacation": 0}
 
     for record in operations.attendance_records:
-        status = record.get("Status", "")
+        status = record["Status"]
         if status in counts:
             counts[status] += 1
 
     labels = [status for status, count in counts.items() if count > 0]
-    values = [count for count in counts.values() if count > 0]
-
-    if not values:
+    values = []
+    for count in counts.values():
+     if count > 0:
+        values.append(count)
+     if not values:
         print("No attendance records to chart.")
         return
 
@@ -50,8 +52,10 @@ def chart_status_breakdown():
 
 
 def chart_absences_by_department():
-    # Build Employee ID -> Department lookup, since attendance_records has no Department column
-    dept_by_id = {emp["Employee ID"]: emp["Department"] for emp in operations.employees}
+    
+    dept_by_id = {}
+    for emp in operations.employees:
+     dept_by_id[emp["Employee ID"]] = emp["Department"]
 
     dept_absences = {}
     for record in operations.attendance_records:
