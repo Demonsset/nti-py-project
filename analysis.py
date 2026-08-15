@@ -77,7 +77,7 @@ def numpy_summary():
         for r in records:
             if r["Status"] == "Absent":
                 absent_days += 1
-        total_days = present_days + absent_days
+        total_days = present_days + absent_days+late_days
 
         if total_days > 0:
             pct = present_days / total_days * 100
