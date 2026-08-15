@@ -91,10 +91,11 @@ def main():
     # operations.py owns employees/attendance_records as module-level globals.
     # These calls mutate operations.employees / operations.attendance_records
     # in place and return nothing — do NOT assign their result to a variable.
-    operations.load_employees()
-    operations.load_attendance()
 
     while True:
+        operations.load_employees()
+        operations.load_attendance()
+        
         print(MENU_TEXT)
         choice = get_menu_choice()
 
