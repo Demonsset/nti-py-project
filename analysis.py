@@ -210,7 +210,7 @@ def display_frequently_absent_employees():
 
     print(f"\n--- Employees Absent {ABSENT_THRESHOLD}+ Times ---")
     for emp_id, count in absent_counts.sort_values(ascending=False).items():
-        print(f"ID: {emp_id} | Name: {names(emp_id)} | Absent days: {count}")
+        print(f"ID: {emp_id} | Name: {names.get(emp_id, 'Unknown')} | Absent days: {count}")
 
 
 def monthly_report():
