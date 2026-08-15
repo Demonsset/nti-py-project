@@ -170,7 +170,7 @@ def pandas_report(filter_by="none", filter_value="none"):
     }
 
 def display_late_employees():
-    """Option 8. Lists employees late LATE_THRESHOLD or more times."""
+    
     merged = _merged_df()
 
     if merged.empty:
