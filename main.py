@@ -40,7 +40,7 @@ def prompt_add_employee():
 
 def prompt_record_attendance():
     emp_id = input("Employee ID: ").strip()
-    date = input("Date (YYYY-MM-DD): ").strip()
+    date = input("Date (DD-MM-YYYY): ").strip()
     arrival = input("Arrival time (HH:MM): ").strip()
     departure = input("Departure time (HH:MM): ").strip()
     operations.record_attendance(emp_id, date, arrival, departure)
@@ -48,7 +48,7 @@ def prompt_record_attendance():
 
 def prompt_mark_absence():
     emp_id = input("Employee ID: ").strip()
-    date = input("Date (YYYY-MM-DD): ").strip()
+    date = input("Date (DD-MM-YYYY): ").strip()
     status = input("Status (Absent/Vacation): ").strip().capitalize()
     operations.mark_absence(emp_id, date, status)
 
@@ -120,5 +120,6 @@ def main():
             break
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":# main without the underscores is for the import while with underscores
+    #then this file was explicitly ran by the user to avoid hitting the menu function
     main()
