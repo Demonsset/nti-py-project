@@ -149,7 +149,7 @@ def pandas_report(filter_by="none", filter_value="none"):
 
     status_by_department = pd.DataFrame(counts).fillna(0).astype(int)
 
-    # --- Sort employees by attendance percentage ---
+  
     per_employee = []
     for emp_id, records in merged.groupby("Employee ID"):
         name = records["Name"].iloc[0]
@@ -240,9 +240,7 @@ def monthly_report():
         print(f"\nMost punctual employee: {most_punctual['Name']} ({most_punctual['Attendance %']}%)")
         print(f"Most frequently absent employee: {most_absent['Name']} ({most_absent['Attendance %']}%)")
 
-    # Department attendance comparison (image 1: distinct bullet from the
-    # status-count table above -- this is attendance % per department,
-    # not a raw status count).
+  
     if not sorted_pct.empty:
         merged = _merged_df()
         dept_by_id = merged.drop_duplicates("Employee ID").set_index("Employee ID")["Department"]
