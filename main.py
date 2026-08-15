@@ -46,6 +46,40 @@ def prompt_record_attendance():
     operations.record_attendance(emp_id, date, arrival, departure)
 
 
+def prompt_update_attendance():
+    emp_id = input("Employee ID: ").strip()
+    date = input("Date (DD-MM-YYYY): ").strip()
+
+    new_fields = {}
+    arrival = input("New Arrival time (HH:MM) [leave blank to keep current]: ").strip()
+    if arrival:
+        new_fields["Arrival Time"] = arrival
+    departure = input("New Departure time (HH:MM) [leave blank to keep current]: ").strip()
+    if departure:
+        new_fields["Departure Time"] = departure
+    status = input("New Status (Present/Late/Absent/Vacation) [leave blank to keep current]: ").strip().capitalize()
+    if status:
+        new_fields["Status"] = status
+
+    operations.update_attendance(emp_id, date, new_fields)
+
+
+def prompt_display_employee_attendance():
+    emp_id = input("Employee ID: ").strip()
+    operations.display_employee_attendance(emp_id)
+
+
+def prompt_search_attendance_by_date():
+    date = input("Date (DD-MM-YYYY): ").strip()
+    operations.search_attendance_by_date(date)
+
+
+def prompt_calculate_attendance_percentage():
+    emp_id = input("Employee ID: ").strip()
+    pct = operations.calculate_attendance_percentage(emp_id)
+    print(f"Attendance percentage: {pct}%")
+
+
 def prompt_mark_absence():
     emp_id = input("Employee ID: ").strip()
     date = input("Date (DD-MM-YYYY): ").strip()
@@ -74,20 +108,16 @@ def main():
             prompt_record_attendance()
 
         elif choice == 4:
-            # Depends on Phase 2's update_attendance(emp_id, date, new_fields)
-            print("Update attendance is not implemented yet (Phase 2).")
+            prompt_update_attendance()
 
         elif choice == 5:
-            # Depends on Phase 2's display_employee_attendance(emp_id)
-            print("Display employee attendance is not implemented yet (Phase 2).")
+            prompt_display_employee_attendance()
 
         elif choice == 6:
-            # Depends on Phase 2's search_attendance_by_date(date)
-            print("Search attendance by date is not implemented yet (Phase 2).")
+            prompt_search_attendance_by_date()
 
         elif choice == 7:
-            # Depends on Phase 2's calculate_attendance_percentage(emp_id)
-            print("Calculate attendance percentage is not implemented yet (Phase 2).")
+            prompt_calculate_attendance_percentage()
 
         elif choice == 8:
             # Depends on Phase 3's analysis.display_late_employees()

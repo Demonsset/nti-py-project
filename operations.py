@@ -102,6 +102,15 @@ def determine_status(arrival):
     else:
         return "Present"
 
+def is_valid_date(date_str):
+    try:
+        datetime.strptime(date_str, "%d-%m-%Y")
+        return True
+    except (ValueError, TypeError):
+        return False
+
+def is_valid_status(status):
+    return status in {"Present", "Late", "Absent", "Vacation"}
 
 def mark_absence(emp_id, date, status):
 
@@ -195,3 +204,111 @@ def record_attendance(emp_id, date, arrival, departure):#date format must be %d-
     print("Attendance recorded successfully.")
 
     return True
+
+ 
+def update_attendance(emp_id, date, new_fields):
+    target_record = None
+    # Find the record to update
+    for record in attendance_records:
+        if record["Employee ID"] == emp_id and record["Date"] == date:
+            target_record = record
+            break
+        
+    if not target_record:
+        print("Attendance record not found.")
+        return False
+
+    # Update the fields
+    for field, val in new_fields.items():
+        if field == "Status":
+            if not is_valid_status(val):
+                print(f"Invalid status value: {val}")
+                return False
+            target_record["Status"] = val
+        elif field == "Arrival Time":
+            target_record["Arrival Time"] = val
+        elif field == "Departure Time":
+            target_record["Departure Time"] = val
+
+    if "Arrival Time" in new_fields or "Departure Time" in new_fields:
+        arr = target_record.get("Arrival Time", "")
+        dep = target_record.get("Departure Time", "")
+        if arr and dep:
+            try:
+                arr_dt = datetime.strptime(arr, "%H:%M")
+                dep_dt = datetime.strptime(dep, "%H:%M")
+                wh = (dep_dt - arr_dt).total_seconds() / 3600
+                target_record["Working Hours"] = round(wh, 2)
+            except ValueError:
+                print("Invalid time format in record.")
+                return False
+        
+        if "Status" not in new_fields:
+            target_record["Status"] = determine_status(arr)
+
+    save_attendance()
+    print("Attendance record updated successfully.")
+    return True
+
+
+def display_employee_attendance(emp_id):
+    emp_exists = any(emp["Employee ID"] == emp_id for emp in employees)
+    if not emp_exists:
+        print(f"Employee with ID {emp_id} does not exist.")
+        return
+
+    records = [r for r in attendance_records if r["Employee ID"] == emp_id]
+    if not records:
+        print(f"No attendance records found for Employee ID: {emp_id}")
+        return
+
+    print(f"\n--- Attendance Records for Employee ID: {emp_id} ---")
+    for r in records:
+        print(
+            f"Date: {r['Date']} | "
+            f"Arrival: {r['Arrival Time'] or 'N/A'} | "
+            f"Departure: {r['Departure Time'] or 'N/A'} | "
+            f"Status: {r['Status']} | "
+            f"Working Hours: {r['Working Hours']}"
+        )
+
+
+def search_attendance_by_date(date):
+    if not is_valid_date(date):
+        print("Invalid date format. Use DD-MM-YYYY.")
+        return
+
+    records = [r for r in attendance_records if r["Date"] == date]
+    if not records:
+        print(f"No attendance records found for Date: {date}")
+        return
+
+    print(f"\n--- Attendance Records for Date: {date} ---")
+    for r in records:
+        print(
+            f"Employee ID: {r['Employee ID']} | "
+            f"Arrival: {r['Arrival Time'] or 'N/A'} | "
+            f"Departure: {r['Departure Time'] or 'N/A'} | "
+            f"Status: {r['Status']} | "
+            f"Working Hours: {r['Working Hours']}"
+        )
+
+
+def calculate_attendance_percentage(emp_id):
+    records = [r for r in attendance_records if r["Employee ID"] == emp_id]
+    if not records:
+        print(f"No attendance records found for Employee ID: {emp_id}")
+        return 0.0
+
+    present_days = sum(1 for r in records if r["Status"] in ("Present", "Late"))
+    total_days = sum(1 for r in records if r["Status"] in ("Present", "Late", "Absent"))
+
+    if total_days == 0:
+        percentage = 100.0
+    else:
+        percentage = (present_days / total_days) * 100
+
+    if percentage < 75.0:
+        print(f"[WARNING] Attendance percentage for Employee {emp_id} is {percentage:.2f}%, which is below the 75% threshold!")
+
+    return round(percentage, 2)

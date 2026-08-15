@@ -1,0 +1,5 @@
+Employee ID,Date,Arrival Time,Departure Time,Status,Working Hours
+8,15-08-2026,09:15,17:00,Late,7.75
+8,16-08-2026,09:05,17:00,Late,7.92
+8,17-08-2026,,,Absent,0
+8,18-08-2026,,,Vacation,0
