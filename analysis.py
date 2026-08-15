@@ -192,7 +192,7 @@ def display_late_employees():
 
 
 def display_frequently_absent_employees():
-    """Option 9. Lists employees absent ABSENT_THRESHOLD or more times."""
+   
     merged = _merged_df()
 
     if merged.empty:
@@ -210,18 +210,11 @@ def display_frequently_absent_employees():
 
     print(f"\n--- Employees Absent {ABSENT_THRESHOLD}+ Times ---")
     for emp_id, count in absent_counts.sort_values(ascending=False).items():
-        print(f"ID: {emp_id} | Name: {names.get(emp_id, 'Unknown')} | Absent days: {count}")
+        print(f"ID: {emp_id} | Name: {names(emp_id)} | Absent days: {count}")
 
 
 def monthly_report():
-    """
-    Option 10. Combines numpy_summary() and pandas_report() into the
-    full report required by image 1 / image 2:
-      - attendance percentage (per employee, sorted)
-      - late days / absent days (department status counts)
-      - most punctual employee / most frequently absent employee
-      - department attendance comparison
-    """
+  
     summary = numpy_summary()
     report = pandas_report()
 
